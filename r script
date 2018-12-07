@@ -1,0 +1,242 @@
+data_sample_1 = read.csv("https://raw.githubusercontent.com/kekecsz/PSYP13_Data_analysis_class-2018/master/home_sample_1.csv")
+View(data_sample_1)
+View(data_new)
+
+library(lmtest)
+library(car)
+library(sandwich)
+library(ggplot2)
+library(lm.beta)
+
+library(psych) # for describe
+library(ggplot2) # for ggplot
+library(cAIC4) # for cAIC
+library(r2glmm) # for r2beta
+library(lme4) # for lmer
+library(lmerTest) # to get singificance test in lmer
+
+
+
+
+data_new = data_sample_1 #enter in code script
+describe(data_new) #enter in code script
+
+data_new[data_new[, "age"] == "222", "age"] = 22
+
+
+table(data_new$sex) #enter in code script
+describe(data_new[, "age"])
+table(data_new$age) #enter in code script
+summary(data_new) #enter in code script
+
+plot(data_new) #enter in code scipt
+?lm
+
+mod1 = lm(pain ~ age + sex, data = data_new) #enter in code script
+
+describe(mod1)
+mod1
+print(mod1) #enter in code script
+plot(mod1)
+AIC(mod1) #enter in code script
+
+summary(mod1) #enter in code script
+lm.beta(mod1) #enter in script
+abline(mod1)
+confint(mod1) #enter in script
+levels(sex)
+cor(age, sexmale, method= "pearson")
+
+mod2 = lm(pain ~ age + sex + STAI_trait + pain_cat + mindfulness + cortisol_serum + cortisol_saliva, data = data_new)
+summary(mod2) #enter in script
+
+plot(mod2)
+plot(mod2, which = 5)
+plot(mod2, which = 4)
+plot(mod2, which = 3)
+hist(residuals(mod2), breaks = 20)
+describe(residuals(mod2))
+fitted.values(mod2)
+
+shapiro.test(mod2)
+
+ncvTest(mod2)
+vif(mod2)
+
+
+data_new_nooutliers = data_new[-c(44, 71), ]
+mod3 = lm(pain ~ age + sex + STAI_trait + pain_cat + mindfulness + cortisol_serum + cortisol_saliva, data = data_new_nooutliers)
+mod3
+describe(residuals(mod3))
+plot(mod3, which = 2)
+hist(residuals(mod3), breaks = 20)
+
+summary(mod2)
+summary(mod3)
+residualPlots(mod2) #for linearity
+ncvTest(mod2)
+vif(mod2)
+
+
+
+#PART 2 
+
+modall = lm(pain ~ age + sex + STAI_trait + pain_cat + mindfulness + cortisol_serum + cortisol_saliva + weight, data = data_new)
+summary(modall) #modell with all possible variables
+
+print(modall)
+
+plot(modall)
+plot(modall, which = 2) #normality
+hist(residuals(modall), breaks = 20)
+describe(residuals(modall)) #skew and kurtosis, enter in print
+residualPlots(modall) #linearity
+plot(modall, which = 3) #homoscedasticity
+ncvTest(modall) # NCV test
+vif(modall)
+
+plot(modw, which = 4)
+residualPlots(modw)
+
+
+step(object = modall,
+      direction = "backward")
+modw = lm(pain ~ sex + mindfulness + pain_cat + age + cortisol_serum, data = data_new) #backwards model
+
+modt = lm(pain ~ sex + age + STAI_trait + pain_cat + mindfulness + cortisol_serum + cortisol_saliva, data = data_new)
+
+summary(modw)$adj.r.squared #model comparison
+
+summary(modt)$adj.r.squared #model comparison
+
+anova(modw, modt) #model comparison
+AIC(modw)
+AIC(modt)
+
+anova(modall, modw, modt)
+
+summary(modall)$adj.r.squared
+summary(modw)$adj.r.squared
+summary(modt)$adj.r.squared
+AIC(modall)
+plot(modall, which = 4)
+summary(modall)
+lm.beta(modall)
+confint(modall)
+AIC(modw)
+AIC(modt)
+summary(modw)
+lm.beta(modw)
+confint(modw)
+
+data_new_2[, "pain_transformed"] = log(data_new_2[,"pain"])
+modall24 = lm(pain_transformed ~ sex + age + weight + STAI_trait + pain_cat + mindfulness +cortisol_serum + cortisol_saliva, data = data_new_2)
+plot(mod_house4, which = 3)
+
+### rad 28 ålder 222
+
+## Y = pain
+
+#Yi “b2Xi2 `b1Xi1 `b0 `εi
+
+
+summary(mod1)$adj.r.squared #enter in script
+summary(mod2)$adj.r.squared #enter in script
+
+summary(mod2)
+
+anova(mod1, mod2) #enter in script
+AIC(mod1) #enter in script
+AIC(mod2) #enter in script
+
+
+
+lm.beta(mod2) #enter in script
+confint(mod2) #enter in script
+
+
+
+
+library(psych) # for describe
+library(lm.beta) # for lm.beta
+library(car) # for scatter3d
+library(ggplot2) # for ggplot
+library(rgl) # for scatter3d
+
+
+
+
+data_house = read.csv("https://raw.githubusercontent.com/kekecsz/PSYP13_Data_analysis_class-2018/master/data_house_small_sub.csv")
+data_sample_1 = read.csv("https://raw.githubusercontent.com/kekecsz/PSYP13_Data_analysis_class-2018/master/home_sample_1.csv")
+### Check the dataset
+
+View(data_sample_1)
+
+
+summary(mod1)$adj.r.squared
+summary(mod2)$adj.r.squared
+
+
+
+describe(mod1)
+mod1
+print(mod1)
+plot(mod1)
+
+describe(mod2)
+print(mod2)
+
+lm(formula = pain ~ age + sex + STAI_trait + pain_cat + mindfulness + 
+     cortisol_serum + cortisol_saliva, data = data_new)
+
+
+
+
+mod_house1
+
+
+
+plot(pain ~ age, data = data_new)
+plot(pain ~ sex, data = data_new)
+
+plot(pain ~ STAI_trait, data = data_new)
+abline(lm(pain ~ STAI_trait, data = data_new))
+plot(pain ~ pain_cat, data = data_new)
+abline(lm(pain ~ pain_cat, data = data_new))
+plot(pain ~  mindfulness, data = data_new)
+abline(lm(pain ~ mindfulness, data = data_new))
+plot(pain ~ cortisol_serum, data = data_new)
+abline(lm(pain ~ cortisol_serum, data = data_new))
+plot(pain ~ cortisol_saliva, data=data_new)
+abline(lm(pain ~ cortisol_saliva, data = data_new))
+plot(pain ~ age + sex + STAI_trait + pain_cat + mindfulness + cortisol_serum + cortisol_saliva, data = data_new)
+
+abline(lm(pain ~ age, data = data_cleaned)
+       abline(lm(price ~ sqft_living, data = data_house))
+plot(price ~ grade, data = data_house)
+abline(lm(price ~ grade, data = data_house))
+
+abline(lm(pain ~ age,data = data_new))
+abline(lm(pain ~ sex,data = data_new))
+plot(mod2, which = 5) 
+plot(mod2, which = 2)
+plot(mod2, which = 4)
+hist(residuals(mod2), breaks = 20)
+describe(residuals(mod2))
+
+
+AIC(mod1)
+
+confint(mod1)
+lm.beta(mod1)
+
+mod2 = lm(pain ~ age + sex + STAI_trait + pain_cat + mindfulness + cortisol_serum + cortisol_saliva, data = data_new)
+summary(mod2)
+mod2
+
+confint(mod2)
+lm.beta(mod2)
+AIC(mod2)
+
+mod2 = lm(pain ~ age + sex + STAI_trait + pain_cat + mindfulness + cortisol_serum + cortisol_saliva, data = data_cleaned)
+summary(mod2)
